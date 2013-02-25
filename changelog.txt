@@ -1,0 +1,5 @@
+v 0.0.2:
+- fixed error for episodes
+
+v 0.0.1:
+- initial release
