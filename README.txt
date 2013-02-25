@@ -5,5 +5,7 @@ Add this to DialogVideoInfo.xml
 
 The following properties are available
 Window(movieinformation).Property(AudioLanguage.%d)
+Window(movieinformation).Property(AudioCodec.%d)
+Window(movieinformation).Property(AudioChannels.%d)
 Window(movieinformation).Property(SubtitleLanguage.%d)
 

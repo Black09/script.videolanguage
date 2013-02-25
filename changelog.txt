@@ -1,3 +1,6 @@
+v 0.0.3:
+- added properties for audio codec & audio channels
+
 v 0.0.2:
 - fixed error for episodes
 

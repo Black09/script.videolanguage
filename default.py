@@ -55,6 +55,8 @@ class Main:
         count = 1
         for item in audio:
             self.window.setProperty('AudioLanguage.%d' % count, item['language'])
+            self.window.setProperty('AudioCodec.%d' % count, item['codec'])
+            self.window.setProperty('AudioChannels.%d' % count, item['channels'])
             count += 1
         count = 1
         for item in subtitles:
@@ -65,6 +67,8 @@ class Main:
         # 10 should be enough
         for i in range(1,10):
             self.window.clearProperty('AudioLanguage.%d' % i)
+            self.window.clearProperty('AudioCodec.%d' % i)
+            self.window.clearProperty('AudioChannels.%d' % i)
             self.window.clearProperty('SubtitleLanguage.%d' % i)
 
 if ( __name__ == "__main__" ):
