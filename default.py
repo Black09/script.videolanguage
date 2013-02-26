@@ -56,7 +56,7 @@ class Main:
         for item in audio:
             self.window.setProperty('AudioLanguage.%d' % count, item['language'])
             self.window.setProperty('AudioCodec.%d' % count, item['codec'])
-            self.window.setProperty('AudioChannels.%d' % count, item['channels'])
+            self.window.setProperty('AudioChannels.%d' % count, str(item['channels']))
             count += 1
         count = 1
         for item in subtitles:

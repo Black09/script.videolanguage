@@ -1,3 +1,6 @@
+v 0.0.4
+- fixed error with audio channels
+
 v 0.0.3:
 - added properties for audio codec & audio channels
 
