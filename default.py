@@ -64,8 +64,8 @@ class Main:
             count += 1
                 
     def _clear_properties( self ):
-        # 10 should be enough
-        for i in range(1,10):
+        # 1 to 99 should really be enough
+        for i in range(1,100):
             self.window.clearProperty('AudioLanguage.%d' % i)
             self.window.clearProperty('AudioCodec.%d' % i)
             self.window.clearProperty('AudioChannels.%d' % i)
