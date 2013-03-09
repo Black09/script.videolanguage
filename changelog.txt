@@ -1,3 +1,6 @@
+v 0.0.6
+- fixed script error if dbid is -1 (e.g. in the trailers add-on)
+
 v 0.0.5
 - script now clears property 1 to 99 instead of 1 to 9
 

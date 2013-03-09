@@ -19,12 +19,14 @@ class Main:
     def __init__( self ):
         log('version %s started' % __addonversion__ )
         self._parse_argv()
-        self.window = xbmcgui.Window(12003) # Video info dialog    
+        self.window = xbmcgui.Window(12003) # Video info dialog
         if self.movieid:
             # clear old properties
             self._clear_properties()
-            # set new properties
-            self._set_languages()
+            # only set new properties if movieid is not smaller than 0, e.g. -1
+            if self.movieid > -1:
+                # set new properties
+                self._set_languages()
 
     def _parse_argv( self ):
         try:
