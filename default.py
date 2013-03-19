@@ -38,6 +38,7 @@ class Main:
             params = {}
         self.movieid = int(params.get( 'movieid', False ))
         self.backend = params.get( 'backend', False )
+        self.type = str(params.get( 'type', False ))
 
     def run_backend(self):
         self._stop = False
@@ -60,14 +61,14 @@ class Main:
 
     def _set_languages( self,dbid ):
         json_query = ''
-        if xbmc.getCondVisibility('Container.Content(movies)'):
+        if (xbmc.getCondVisibility('Container.Content(movies)') or (self.type == "movie")):
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails"], "movieid":%s }, "id": 1}' % dbid)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             log(json_query)
             json_response = simplejson.loads(json_query)
             if (json_response['result'] != None) and (json_response['result'].has_key('moviedetails')):
                 self._set_properties( json_response['result']['moviedetails']['streamdetails']['audio'], json_response['result']['moviedetails']['streamdetails']['subtitle'])
-        elif xbmc.getCondVisibility('Container.Content(episodes)'):
+        elif (xbmc.getCondVisibility('Container.Content(episodes)') or (self.type == "episode")):
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["streamdetails"], "episodeid":%s }, "id": 1}' % dbid)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             log(json_query)
