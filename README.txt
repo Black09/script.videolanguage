@@ -3,7 +3,7 @@ This script is designed to use in the video info dialog and sets properties for 
 Add this to DialogVideoInfo.xml
 <onload condition="System.HasAddon(script.videolanguage) + [Container.Content(movies) | Container.Content(episodes) | Container.Content(musicvideos)]">RunScript(script.videolanguage,movieid=$INFO[ListItem.DBID])</onload>
 
-or run it in background by adding the following line to MyVideoNav.xml
+or run it in background by adding the following line to MyVideoNav.xml. If the script runs in background, you don't need to run it in DialogVideoInfo.xml.
 <onload condition="System.HasAddon(script.videolanguage)">RunScript(script.videolanguage,background=True)</onload>
 
 The following properties are available
