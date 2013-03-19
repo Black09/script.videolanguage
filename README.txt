@@ -12,3 +12,4 @@ Window(movieinformation).Property(AudioCodec.%d)
 Window(movieinformation).Property(AudioChannels.%d)
 Window(movieinformation).Property(SubtitleLanguage.%d)
 
+Force the content type by adding type=movie or type=episode
