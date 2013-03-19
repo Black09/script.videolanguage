@@ -1,3 +1,6 @@
+v 0.0.9
+- music video support
+
 v 0.0.8
 - added option to force type
 
