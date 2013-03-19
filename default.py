@@ -19,14 +19,17 @@ class Main:
     def __init__( self ):
         log('version %s started' % __addonversion__ )
         self._parse_argv()
-        self.window = xbmcgui.Window(12003) # Video info dialog
-        if self.movieid:
+        if self.backend:
+            self.window = xbmcgui.Window( 10000 )
+            self.run_backend()
+        elif self.movieid:
+            self.window = xbmcgui.Window(12003) # Video info dialog
             # clear old properties
             self._clear_properties()
             # only set new properties if movieid is not smaller than 0, e.g. -1
             if self.movieid > -1:
                 # set new properties
-                self._set_languages()
+                self._set_languages(self.movieid)
 
     def _parse_argv( self ):
         try:
@@ -34,18 +37,38 @@ class Main:
         except:
             params = {}
         self.movieid = int(params.get( 'movieid', False ))
+        self.backend = params.get( 'backend', False )
 
-    def _set_languages( self ):
+    def run_backend(self):
+        self._stop = False
+        self.previousitem = ''
+        while not self._stop:
+            self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
+            if ((self.selecteditem != self.previousitem) and (not xbmc.getCondVisibility("ListItem.IsFolder"))):
+                self.window.clearProperty("NextAired.Label")
+                self.previousitem = self.selecteditem
+                self._clear_properties()
+                # only set new properties if movieid is not smaller than 0, e.g. -1
+                if xbmc.getInfoLabel("ListItem.DBID") > -1:
+                    # set new properties
+                    self._set_languages(xbmc.getInfoLabel("ListItem.DBID"))
+            xbmc.sleep(50)
+            
+            if not xbmc.getCondVisibility("Window.IsVisible(10025)"):
+                self.window.clearProperty("NextAired.Label")
+                self._stop = True
+
+    def _set_languages( self,dbid ):
         json_query = ''
         if xbmc.getCondVisibility('Container.Content(movies)'):
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails"], "movieid":%s }, "id": 1}' % self.movieid)
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails"], "movieid":%s }, "id": 1}' % dbid)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             log(json_query)
             json_response = simplejson.loads(json_query)
             if (json_response['result'] != None) and (json_response['result'].has_key('moviedetails')):
                 self._set_properties( json_response['result']['moviedetails']['streamdetails']['audio'], json_response['result']['moviedetails']['streamdetails']['subtitle'])
         elif xbmc.getCondVisibility('Container.Content(episodes)'):
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["streamdetails"], "episodeid":%s }, "id": 1}' % self.movieid)
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["streamdetails"], "episodeid":%s }, "id": 1}' % dbid)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             log(json_query)
             json_response = simplejson.loads(json_query)
