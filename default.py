@@ -44,7 +44,7 @@ class Main:
         self.previousitem = ''
         while not self._stop:
             self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
-            if ((self.selecteditem != self.previousitem) and (not xbmc.getCondVisibility("ListItem.IsFolder"))):
+            if ((self.selecteditem != self.previousitem) and (not xbmc.getCondVisibility("ListItem.IsFolder")) and (not xbmc.getCondVisibility("Container.Scrolling"))):
                 self.previousitem = self.selecteditem
                 self._clear_properties()
                 # only set new properties if movieid is not smaller than 0, e.g. -1
@@ -58,28 +58,30 @@ class Main:
 
     def _set_languages( self, dbid ):
         json_query = ''
-        if (xbmc.getCondVisibility('Container.Content(movies)') or (self.type == "movie")):
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails"], "movieid":%s }, "id": 1}' % dbid)
-            json_query = unicode(json_query, 'utf-8', errors='ignore')
-            log(json_query)
-            json_response = simplejson.loads(json_query)
-            if (json_response['result'] != None) and (json_response['result'].has_key('moviedetails')):
-                self._set_properties( json_response['result']['moviedetails']['streamdetails']['audio'], json_response['result']['moviedetails']['streamdetails']['subtitle'])
-        elif (xbmc.getCondVisibility('Container.Content(episodes)') or (self.type == "episode")):
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["streamdetails"], "episodeid":%s }, "id": 1}' % dbid)
-            json_query = unicode(json_query, 'utf-8', errors='ignore')
-            log(json_query)
-            json_response = simplejson.loads(json_query)
-            if (json_response['result'] != None) and (json_response['result'].has_key('episodedetails')):
-                self._set_properties( json_response['result']['episodedetails']['streamdetails']['audio'], json_response['result']['episodedetails']['streamdetails']['subtitle'])
-        elif (xbmc.getCondVisibility('Container.Content(musicvideos)') or (self.type == "musicvideo")):
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideoDetails", "params": {"properties": ["streamdetails"], "musicvideoid":%s }, "id": 1}' % dbid)
-            json_query = unicode(json_query, 'utf-8', errors='ignore')
-            log(json_query)
-            json_response = simplejson.loads(json_query)
-            if (json_response['result'] != None) and (json_response['result'].has_key('musicvideodetails')):
-                self._set_properties( json_response['result']['musicvideodetails']['streamdetails']['audio'], json_response['result']['musicvideodetails']['streamdetails']['subtitle'])
-     
+        try:
+            if (xbmc.getCondVisibility('Container.Content(movies)') or (self.type == "movie")):
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails"], "movieid":%s }, "id": 1}' % dbid)
+                json_query = unicode(json_query, 'utf-8', errors='ignore')
+                log(json_query)
+                json_response = simplejson.loads(json_query)
+                if (json_response['result'] != None) and (json_response['result'].has_key('moviedetails')):
+                    self._set_properties( json_response['result']['moviedetails']['streamdetails']['audio'], json_response['result']['moviedetails']['streamdetails']['subtitle'])
+            elif (xbmc.getCondVisibility('Container.Content(episodes)') or (self.type == "episode")):
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["streamdetails"], "episodeid":%s }, "id": 1}' % dbid)
+                json_query = unicode(json_query, 'utf-8', errors='ignore')
+                log(json_query)
+                json_response = simplejson.loads(json_query)
+                if (json_response['result'] != None) and (json_response['result'].has_key('episodedetails')):
+                    self._set_properties( json_response['result']['episodedetails']['streamdetails']['audio'], json_response['result']['episodedetails']['streamdetails']['subtitle'])
+            elif (xbmc.getCondVisibility('Container.Content(musicvideos)') or (self.type == "musicvideo")):
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideoDetails", "params": {"properties": ["streamdetails"], "musicvideoid":%s }, "id": 1}' % dbid)
+                json_query = unicode(json_query, 'utf-8', errors='ignore')
+                log(json_query)
+                json_response = simplejson.loads(json_query)
+                if (json_response['result'] != None) and (json_response['result'].has_key('musicvideodetails')):
+                    self._set_properties( json_response['result']['musicvideodetails']['streamdetails']['audio'], json_response['result']['musicvideodetails']['streamdetails']['subtitle'])
+        except:
+            pass
     def _set_properties( self, audio, subtitles ):
         # Set language properties
         count = 1
