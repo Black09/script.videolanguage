@@ -75,6 +75,13 @@ class Main:
             json_response = simplejson.loads(json_query)
             if (json_response['result'] != None) and (json_response['result'].has_key('episodedetails')):
                 self._set_properties( json_response['result']['episodedetails']['streamdetails']['audio'], json_response['result']['episodedetails']['streamdetails']['subtitle'])
+        elif (xbmc.getCondVisibility('Container.Content(musicvideos)') or (self.type == "musicvideo")):
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideoDetails", "params": {"properties": ["streamdetails"], "musicvideoid":%s }, "id": 1}' % dbid)
+            json_query = unicode(json_query, 'utf-8', errors='ignore')
+            log(json_query)
+            json_response = simplejson.loads(json_query)
+            if (json_response['result'] != None) and (json_response['result'].has_key('musicvideodetails')):
+                self._set_properties( json_response['result']['musicvideodetails']['streamdetails']['audio'], json_response['result']['musicvideodetails']['streamdetails']['subtitle'])
      
     def _set_properties( self, audio, subtitles ):
         # Set language properties
