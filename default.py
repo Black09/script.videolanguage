@@ -44,11 +44,11 @@ class Main:
         self.previousitem = ''
         while not self._stop:
             self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
-            if ((self.selecteditem != self.previousitem) and (not xbmc.getCondVisibility("ListItem.IsFolder")) and (not xbmc.getCondVisibility("Container.Scrolling"))):
+            if (self.selecteditem != self.previousitem):
                 self.previousitem = self.selecteditem
                 self._clear_properties()
                 # only set new properties if movieid is not smaller than 0, e.g. -1
-                if xbmc.getInfoLabel("ListItem.DBID") > -1:
+                if ((xbmc.getInfoLabel("ListItem.DBID") > -1) and (not xbmc.getCondVisibility("ListItem.IsFolder")) and (not xbmc.getCondVisibility("Container.Scrolling"))):
                     # set new properties
                     self._set_languages(xbmc.getInfoLabel("ListItem.DBID"))
             xbmc.sleep(100)
