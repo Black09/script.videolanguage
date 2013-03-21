@@ -10,7 +10,7 @@ __addonid__      = __addon__.getAddonInfo('id')
 __addonversion__ = __addon__.getAddonInfo('version')
 
 def log(txt):
-    if isinstance (txt,str):
+    if isinstance(txt, str):
         txt = txt.decode("utf-8")
     message = u'%s: %s' % (__addonid__, txt)
     xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
@@ -88,6 +88,7 @@ class Main:
                     self._set_properties(json_response['result']['musicvideodetails']['streamdetails']['audio'], json_response['result']['musicvideodetails']['streamdetails']['subtitle'])
         except:
             pass
+            
     def _set_properties( self, audio, subtitles ):
         # Set language properties
         count = 1
