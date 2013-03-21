@@ -1,6 +1,7 @@
 v 0.0.9
 - music video support
 - exception handling
+- optimization
 
 v 0.0.8
 - added option to force type
