@@ -21,14 +21,16 @@ class Main:
         self._init_vars()
         self._parse_argv()
         # run in backend if parameter was set
-        if self.backend:
-            self.run_backend()
-        # only set new properties if movieid is not smaller than 0, e.g. -1
-        elif self.movieid and self.movieid > -1:
-            self._set_languages(self.movieid)
-        # else clear old properties
-        else:
-            self._clear_properties()
+        if xbmc.getCondVisibility("IsEmpty(Window(home).Property(videolanguage_backend_running))"):
+            if self.backend:
+                xbmc.executebuiltin('SetProperty(videolanguage_backend_running,true,home)')
+                self.run_backend()
+            # only set new properties if movieid is not smaller than 0, e.g. -1
+            elif self.movieid and self.movieid > -1:
+                self._set_languages(self.movieid)
+            # else clear old properties
+            else:
+                self._clear_properties()
             
     def _init_vars(self):
         self.window = xbmcgui.Window(12003) # Video info dialog
@@ -61,6 +63,7 @@ class Main:
             xbmc.sleep(100)
             if not xbmc.getCondVisibility("Window.IsVisible(videolibrary)"):
                 self._clear_properties()
+                xbmc.executebuiltin('ClearProperty(videolanguage_backend_running,home)')
                 self._stop = True
 
     def _set_languages( self, dbid ):
